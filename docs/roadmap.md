@@ -8,7 +8,7 @@
 - [ ] **IL2CPP runtime** — see [src/Evection.Core.Il2Cpp](../src/Evection.Core.Il2Cpp/README.md)
 - [x] Desktop app (`src/Evection.GUI`) built from the Evection UI Figma design system
 - [x] Optional Discord sign-in + settings sync (`services/sync-worker`) — **needs deploying**
-- [ ] Confirm the moon photo's license (see THIRD-PARTY-NOTICES.md)
+- [x] Moon photo license confirmed (NASA, public domain)
 - [ ] Set Proton launch options automatically
 - [ ] Mod dependencies & load order rules
 - [ ] In-game inspector (live GameObjects, components, field values)

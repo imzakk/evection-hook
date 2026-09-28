@@ -15,10 +15,10 @@ Evection Hook's own code is MIT licensed. It uses or redistributes the following
 | CommunityToolkit.Mvvm | MIT | Compiled into the desktop app | https://github.com/CommunityToolkit/dotnet |
 | SkiaSharp / HarfBuzzSharp | MIT | Native libraries bundled with the desktop app | https://github.com/mono/SkiaSharp |
 | Geist, Geist Mono (Vercel) | SIL Open Font License 1.1 | Font files embedded in the desktop app; license text in `src/Evection.GUI/Assets/Fonts/OFL.txt` | https://github.com/vercel/geist-font |
-| Moon photograph (cover screen) | **To confirm** — taken from the Evection UI Figma file | `src/Evection.GUI/Assets/moon.jpg` | — |
+| Moon photograph (cover screen) | Public domain — NASA, Artemis II image gallery | `src/Evection.GUI/Assets/moon.jpg` (rotated and cropped) | https://www.nasa.gov/gallery/ |
 
-> **Before the first public release:** confirm where the moon photo came from and that it may be redistributed
-> (NASA imagery is public domain; stock photos usually aren't). Replace it if unsure.
+Moon image courtesy of NASA. NASA material is not copyrighted, but its use here does not imply endorsement by NASA
+([NASA media usage guidelines](https://www.nasa.gov/nasa-brand-center/images-and-media/)).
 
 **LGPL note (UnityDoorstop):** we ship Doorstop as an unmodified, separately replaceable DLL. Its source is available at the link
 above; users may replace `winhttp.dll` with their own build.

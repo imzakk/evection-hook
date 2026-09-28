@@ -1,0 +1,35 @@
+# Build output
+bin/
+obj/
+artifacts/
+publish/
+*.nupkg
+
+# Downloaded third-party binaries (fetched by tools/fetch-deps.sh)
+deps/
+
+# Inspector output
+dumps/
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.DotSettings.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test results
+TestResults/
+*.trx
+
+# Sync worker
+node_modules/
+.wrangler/
+
+# GUI screenshots from tools/Evection.GUI.Snapshots
+snapshots/

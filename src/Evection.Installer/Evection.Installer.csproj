@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Description>Installs, repairs and removes Evection Hook in a game folder, and manages its Mods folder.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Evection.Detector\Evection.Detector.csproj" />
+  </ItemGroup>
+</Project>

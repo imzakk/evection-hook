@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Mono games: net472. (IL2CPP mods will target net6.0 once that runtime lands.) -->
+    <TargetFramework>net472</TargetFramework>
+    <Description>Example mod: logs scene changes and draws a label on screen.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Outside this repo, reference EvectionHook/core/Evection.API.dll and 0Harmony.dll instead, with Private=false. -->
+    <ProjectReference Include="..\..\src\Evection.API\Evection.API.csproj" Private="false" />
+    <PackageReference Include="UnityEngine.Modules" Version="$(UnityModulesVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
+</Project>

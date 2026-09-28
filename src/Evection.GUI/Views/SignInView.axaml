@@ -1,0 +1,40 @@
+<!-- Sign-in, from the "Music / Sign in" frame. Optional: "Continue without an account" is always there. -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:c="using:Evection.GUI.Controls"
+             x:Class="Evection.GUI.Views.SignInView"
+             x:DataType="vm:SignInViewModel">
+  <ThemeVariantScope RequestedThemeVariant="Dark">
+    <Grid Background="#000000">
+      <c:StarField Count="120" />
+      <Border Width="400" Padding="40,40,40,32" CornerRadius="{StaticResource RadiusXl}" Background="{DynamicResource BgSubtle}"
+              BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" BoxShadow="{StaticResource ShadowLg}"
+              HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Spacing="24">
+          <c:Icon Kind="mark" Size="40" HorizontalAlignment="Center" />
+          <StackPanel Spacing="8">
+            <TextBlock Classes="h24" Text="welcome to evection hook" HorizontalAlignment="Center" />
+            <TextBlock Classes="copy14 secondary wrap" TextAlignment="Center"
+                       Text="sign in to sync your settings between computers." />
+          </StackPanel>
+          <StackPanel Spacing="10">
+            <Button Classes="primary large" HorizontalAlignment="Stretch" Command="{Binding SignInCommand}">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="{Binding ButtonText}" />
+                <c:Icon Kind="external" VerticalAlignment="Center" IsVisible="{Binding !IsBusy}" />
+              </StackPanel>
+            </Button>
+            <Button Classes="tertiary large" HorizontalAlignment="Stretch" Content="continue without an account"
+                    Command="{Binding ContinueCommand}" />
+          </StackPanel>
+          <Border Classes="callout danger" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <TextBlock Classes="copy13 wrap" Text="{Binding Error}" />
+          </Border>
+          <TextBlock Classes="mono12 tertiary" HorizontalAlignment="Center" Text="opens in your browser" />
+        </StackPanel>
+      </Border>
+      <TextBlock Classes="mono12 tertiary" Text="{Binding Version}" Margin="0,0,24,20" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+    </Grid>
+  </ThemeVariantScope>
+</UserControl>

@@ -1,0 +1,135 @@
+<!-- The cover: the one flashy screen. Stars, the rising moon and the title, from the "Cover / Horizon" frame. -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:c="using:Evection.GUI.Controls"
+             x:Class="Evection.GUI.Views.CoverView"
+             x:DataType="vm:CoverViewModel"
+             Focusable="True">
+  <UserControl.Styles>
+    <!-- Start states -->
+    <Style Selector="UserControl :is(Control).reveal">
+      <Setter Property="Opacity" Value="0" />
+      <Setter Property="RenderTransform" Value="translateY(18px)" />
+    </Style>
+    <Style Selector="UserControl Image#MoonRise">
+      <Setter Property="RenderTransform" Value="translateY(260px)" />
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="UserControl Ellipse#Glow">
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <!-- Shown -->
+    <Style Selector="UserControl.shown :is(Control).reveal">
+      <Setter Property="Opacity" Value="1" />
+      <Setter Property="RenderTransform" Value="translateY(0px)" />
+    </Style>
+    <Style Selector="UserControl.shown Image#MoonRise">
+      <Setter Property="RenderTransform" Value="translateY(0px)" />
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="UserControl.shown Ellipse#Glow">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <!-- Leaving -->
+    <Style Selector="UserControl.leaving StackPanel#TitleBlock">
+      <Setter Property="Opacity" Value="0" />
+      <Setter Property="RenderTransform" Value="translateY(-24px)" />
+    </Style>
+    <Style Selector="UserControl.leaving Image#MoonRise">
+      <Setter Property="RenderTransform" Value="translateY(-60px) scale(1.06)" />
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+  </UserControl.Styles>
+
+  <ThemeVariantScope RequestedThemeVariant="Dark">
+    <Grid Name="Root" Background="#000000" ClipToBounds="True">
+      <c:StarField Name="Stars" />
+
+      <!-- Moon, rising from below the horizon -->
+      <Panel Name="MoonParallax">
+        <Ellipse Name="Glow" Width="2400" Height="1300" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="-800,0,-800,-900"
+                 IsHitTestVisible="False">
+          <Ellipse.Fill>
+            <RadialGradientBrush>
+              <GradientStop Color="#7399A8C7" Offset="0" />
+              <GradientStop Color="#26596680" Offset="0.45" />
+              <GradientStop Color="#00000000" Offset="1" />
+            </RadialGradientBrush>
+          </Ellipse.Fill>
+          <Ellipse.Transitions>
+            <Transitions><DoubleTransition Property="Opacity" Duration="0:0:2.4" Delay="0:0:0.3" /></Transitions>
+          </Ellipse.Transitions>
+        </Ellipse>
+        <Image Name="MoonRise" Source="avares://EvectionHook/Assets/moon.jpg" Stretch="UniformToFill"
+               VerticalAlignment="Bottom" HorizontalAlignment="Center" IsHitTestVisible="False">
+          <Image.Transitions>
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:2.2" Easing="QuinticEaseOut" />
+              <DoubleTransition Property="Opacity" Duration="0:0:1.4" Easing="CubicEaseOut" />
+            </Transitions>
+          </Image.Transitions>
+        </Image>
+      </Panel>
+
+      <!-- Top-left brand -->
+      <StackPanel Classes="reveal" Orientation="Horizontal" Spacing="12" Margin="64,56,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <StackPanel.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.8" Delay="0:0:0.9" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.8" Delay="0:0:0.9" Easing="CubicEaseOut" />
+          </Transitions>
+        </StackPanel.Transitions>
+        <c:Icon Kind="mark" Size="20" Foreground="#FAFAFA" />
+        <TextBlock Classes="mono14" Text="evection.dev" Foreground="#A1A1A1" VerticalAlignment="Center" />
+      </StackPanel>
+
+      <!-- Title block -->
+      <StackPanel Name="TitleBlock" Spacing="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,190,0,0">
+        <StackPanel.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.35" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Easing="CubicEaseIn" />
+          </Transitions>
+        </StackPanel.Transitions>
+        <TextBlock Classes="reveal" Text="evection hook" FontSize="104" FontWeight="SemiBold" LetterSpacing="-6" LineHeight="110"
+                   Foreground="#FAFAFA" HorizontalAlignment="Center" TextTrimming="None">
+          <TextBlock.Transitions>
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:1.1" Delay="0:0:0.35" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:1.1" Delay="0:0:0.35" Easing="QuinticEaseOut" />
+            </Transitions>
+          </TextBlock.Transitions>
+        </TextBlock>
+        <TextBlock Classes="reveal" Text="mods for any unity game." FontSize="22" LineHeight="32"
+                   Foreground="#A1A1A1" HorizontalAlignment="Center" Margin="0,18,0,0">
+          <TextBlock.Transitions>
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:1.1" Delay="0:0:0.6" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:1.1" Delay="0:0:0.6" Easing="QuinticEaseOut" />
+            </Transitions>
+          </TextBlock.Transitions>
+        </TextBlock>
+        <Button Name="Start" Classes="primary large reveal" HorizontalAlignment="Center" Margin="0,40,0,0" Click="OnStart">
+          <Button.Transitions>
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.9" Delay="0:0:1.1" />
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.9" Delay="0:0:1.1" Easing="QuinticEaseOut" />
+            </Transitions>
+          </Button.Transitions>
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="get started" VerticalAlignment="Center" />
+            <c:Icon Kind="arrow-right" VerticalAlignment="Center" />
+          </StackPanel>
+        </Button>
+      </StackPanel>
+
+      <TextBlock Classes="mono12 reveal" Text="{Binding Version}" Foreground="#666666" Margin="0,0,24,20"
+                 HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <TextBlock.Transitions>
+          <Transitions><DoubleTransition Property="Opacity" Duration="0:0:1" Delay="0:0:1.4" /></Transitions>
+        </TextBlock.Transitions>
+      </TextBlock>
+    </Grid>
+  </ThemeVariantScope>
+</UserControl>

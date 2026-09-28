@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet build EvectionHook.sln -c Release
+      - run: dotnet test tests/Evection.Tests -c Release --no-build
+
+  sync-worker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+        working-directory: services/sync-worker
+
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: tools/build-payload.sh --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evection-hook-win-x64
+          path: artifacts/release/win-x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evection-hook-linux-x64
+          path: artifacts/release/linux-x64

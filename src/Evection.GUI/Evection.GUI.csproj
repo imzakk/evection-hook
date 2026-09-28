@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>EvectionHook</AssemblyName>
+    <RootNamespace>Evection.GUI</RootNamespace>
+    <ApplicationIcon>Assets/icon.ico</ApplicationIcon>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+    <Description>Evection Hook desktop app.</Description>
+    <!-- Base URL of the settings-sync server (services/sync-worker). Empty = sign-in disabled. -->
+    <SyncServerUrl Condition="'$(SyncServerUrl)' == ''"></SyncServerUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets/**" />
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>SyncServerUrl</_Parameter1>
+      <_Parameter2>$(SyncServerUrl)</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Evection.Detector\Evection.Detector.csproj" />
+    <ProjectReference Include="..\Evection.Installer\Evection.Installer.csproj" />
+    <ProjectReference Include="..\Evection.Inspector\Evection.Inspector.csproj" />
+  </ItemGroup>
+</Project>

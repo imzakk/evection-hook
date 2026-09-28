@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Description>Lets modders browse, search and decompile a game's code (Mono directly, IL2CPP via Cpp2IL).</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ICSharpCode.Decompiler" Version="$(DecompilerVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Evection.Detector\Evection.Detector.csproj" />
+  </ItemGroup>
+</Project>

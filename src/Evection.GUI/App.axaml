@@ -1,0 +1,34 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:v="using:Evection.GUI.Views"
+             xmlns:p="using:Evection.GUI.Views.Pages"
+             x:Class="Evection.GUI.App"
+             RequestedThemeVariant="Dark"
+             Name="Evection Hook">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://EvectionHook/Theme/Tokens.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.DataTemplates>
+    <DataTemplate DataType="vm:CoverViewModel"><v:CoverView /></DataTemplate>
+    <DataTemplate DataType="vm:SignInViewModel"><v:SignInView /></DataTemplate>
+    <DataTemplate DataType="vm:ShellViewModel"><v:ShellView /></DataTemplate>
+    <DataTemplate DataType="vm:HomePageViewModel"><p:HomePage /></DataTemplate>
+    <DataTemplate DataType="vm:GamesPageViewModel"><p:GamesPage /></DataTemplate>
+    <DataTemplate DataType="vm:ProfilesPageViewModel"><p:ProfilesPage /></DataTemplate>
+    <DataTemplate DataType="vm:GamePageViewModel"><p:GamePage /></DataTemplate>
+    <DataTemplate DataType="vm:CodeBrowserPageViewModel"><p:CodeBrowserPage /></DataTemplate>
+    <DataTemplate DataType="vm:SettingsPageViewModel"><p:SettingsPage /></DataTemplate>
+  </Application.DataTemplates>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://EvectionHook/Theme/Typography.axaml" />
+    <StyleInclude Source="avares://EvectionHook/Theme/Controls.axaml" />
+  </Application.Styles>
+</Application>

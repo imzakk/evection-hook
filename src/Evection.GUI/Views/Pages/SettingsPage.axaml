@@ -1,0 +1,319 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:c="using:Evection.GUI.Controls"
+             xmlns:v="using:Evection.GUI.Views"
+             x:Class="Evection.GUI.Views.Pages.SettingsPage"
+             x:DataType="vm:SettingsPageViewModel">
+  <DockPanel Margin="32,8,32,0">
+    <TextBlock DockPanel.Dock="Top" Classes="h32" Text="settings" Margin="0,0,0,20" />
+    <TabControl SelectedIndex="{Binding SelectedTab}">
+
+      <!-- ============ general ============ -->
+      <TabItem Header="general">
+        <ScrollViewer>
+          <StackPanel Spacing="28" Margin="0,0,0,48" MaxWidth="720" HorizontalAlignment="Left">
+            <StackPanel>
+              <TextBlock Classes="overline" Text="games" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <CheckBox DockPanel.Dock="Right" Theme="{StaticResource Switch}" IsChecked="{Binding ScanSteamOnStart}" />
+                      <StackPanel Spacing="2" VerticalAlignment="Center">
+                        <TextBlock Classes="label14" Text="find steam games automatically" />
+                        <TextBlock Classes="copy13 secondary" Text="scans your steam libraries on startup." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <StackPanel Spacing="12">
+                      <DockPanel>
+                        <Button DockPanel.Dock="Right" Classes="small" Command="{Binding AddFolderCommand}">
+                          <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="plus" /><TextBlock Text="add" /></StackPanel>
+                        </Button>
+                        <StackPanel Spacing="2">
+                          <TextBlock Classes="label14" Text="other game folders" />
+                          <TextBlock Classes="copy13 secondary" Text="for games that aren't from steam." />
+                        </StackPanel>
+                      </DockPanel>
+                      <ItemsControl ItemsSource="{Binding ExtraFolders}" IsVisible="{Binding ExtraFolders.Count, Converter={x:Static v:Converters.NotZero}}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate x:DataType="x:String">
+                            <DockPanel Margin="0,2">
+                              <Button DockPanel.Dock="Right" Classes="tertiary icon" Width="28" Height="28"
+                                      Command="{Binding $parent[UserControl].((vm:SettingsPageViewModel)DataContext).RemoveFolderCommand}" CommandParameter="{Binding}">
+                                <c:Icon Kind="x" Size="14" Foreground="{DynamicResource TextTertiary}" />
+                              </Button>
+                              <TextBlock Classes="mono12 secondary" Text="{Binding}" VerticalAlignment="Center" />
+                            </DockPanel>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel>
+              <TextBlock Classes="overline" Text="launching" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <CheckBox DockPanel.Dock="Right" Theme="{StaticResource Switch}" IsChecked="{Binding ModsOnlyFromEvection}" />
+                      <StackPanel Spacing="2" VerticalAlignment="Center">
+                        <TextBlock Classes="label14" Text="only load mods when launched from evection hook" />
+                        <TextBlock Classes="copy13 secondary wrap" Text="launching from steam gives you the normal game. hit play here to play with mods." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel>
+              <TextBlock Classes="overline" Text="removing" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <CheckBox DockPanel.Dock="Right" Theme="{StaticResource Switch}" IsChecked="{Binding ConfirmUninstall}" />
+                      <TextBlock Classes="label14" Text="ask before removing" VerticalAlignment="Center" />
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <CheckBox DockPanel.Dock="Right" Theme="{StaticResource Switch}" IsChecked="{Binding KeepModsOnUninstall}" />
+                      <StackPanel Spacing="2" VerticalAlignment="Center">
+                        <TextBlock Classes="label14" Text="keep mods when removing" />
+                        <TextBlock Classes="copy13 secondary" Text="reinstalling brings them back." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ============ appearance ============ -->
+      <TabItem Header="appearance">
+        <ScrollViewer>
+          <StackPanel Spacing="28" Margin="0,0,0,48" MaxWidth="720" HorizontalAlignment="Left">
+            <StackPanel>
+              <TextBlock Classes="overline" Text="look" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <ComboBox DockPanel.Dock="Right" Width="140" ItemsSource="{Binding ThemeOptions}" SelectedIndex="{Binding ThemeIndex}" VerticalAlignment="Center" />
+                      <TextBlock Classes="label14" Text="theme" VerticalAlignment="Center" />
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <CheckBox DockPanel.Dock="Right" Theme="{StaticResource Switch}" IsChecked="{Binding ShowIntro}" />
+                      <TextBlock Classes="label14" Text="show intro on launch" VerticalAlignment="Center" />
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <CheckBox DockPanel.Dock="Right" Theme="{StaticResource Switch}" IsChecked="{Binding ReduceMotion}" />
+                      <StackPanel Spacing="2" VerticalAlignment="Center">
+                        <TextBlock Classes="label14" Text="reduce motion" />
+                        <TextBlock Classes="copy13 secondary" Text="turns off animations." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ============ account ============ -->
+      <TabItem Header="account">
+        <ScrollViewer>
+          <StackPanel Spacing="28" Margin="0,0,0,48" MaxWidth="720" HorizontalAlignment="Left">
+            <StackPanel>
+              <TextBlock Classes="overline" Text="account" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row" IsVisible="{Binding !IsSignedIn}">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small primary" Command="{Binding SignInCommand}" IsEnabled="{Binding SyncAvailable}" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8"><TextBlock Text="sign in" /><c:Icon Kind="external" /></StackPanel>
+                      </Button>
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="not signed in" />
+                        <TextBlock Classes="copy13 secondary" Text="sign in with discord to sync settings between computers." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row" IsVisible="{Binding !SyncAvailable}">
+                    <TextBlock Classes="copy13 tertiary" Text="sign-in isn't set up in this build." VerticalAlignment="Center" />
+                  </Border>
+                  <Border Classes="row" IsVisible="{Binding IsSignedIn}">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small" Content="sign out" Command="{Binding SignOutCommand}" VerticalAlignment="Center" />
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="{Binding AccountName, StringFormat='signed in as {0}'}" />
+                        <TextBlock Classes="copy13 secondary" Text="discord" />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel IsVisible="{Binding IsSignedIn}">
+              <TextBlock Classes="overline" Text="sync" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small" Command="{Binding SyncNowCommand}" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="refresh" Classes.spin="{Binding IsSyncing}" /><TextBlock Text="sync now" /></StackPanel>
+                      </Button>
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="settings sync" />
+                        <TextBlock Classes="copy13 secondary" Text="{Binding LastSyncedText}" />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <StackPanel Spacing="2">
+                      <TextBlock Classes="label14" Text="what syncs" />
+                      <TextBlock Classes="copy13 secondary wrap" Text="your settings and which mods you use per game. game files and folders stay on this computer." />
+                    </StackPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small danger" Content="delete" Command="{Binding DeleteCloudDataCommand}" VerticalAlignment="Center" />
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="delete cloud data" />
+                        <TextBlock Classes="copy13 secondary" Text="removes your data from the server." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ============ advanced ============ -->
+      <TabItem Header="advanced">
+        <ScrollViewer>
+          <StackPanel Spacing="28" Margin="0,0,0,48" MaxWidth="720" HorizontalAlignment="Left">
+            <StackPanel>
+              <TextBlock Classes="overline" Text="storage" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <Button Classes="small" Content="open" Command="{Binding OpenCacheFolderCommand}" />
+                        <Button Classes="small" Content="clear" Command="{Binding ClearCacheCommand}" />
+                      </StackPanel>
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="code cache" />
+                        <TextBlock Classes="mono12 tertiary" Text="{Binding CacheFolder}" />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small" Content="open" Command="{Binding OpenSettingsFolderCommand}" VerticalAlignment="Center" />
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="app settings" />
+                        <TextBlock Classes="mono12 tertiary" Text="{Binding SettingsFolder}" />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel>
+              <TextBlock Classes="overline" Text="development" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <StackPanel Spacing="10">
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="loader files folder" />
+                        <TextBlock Classes="copy13 secondary" Text="leave empty to use the bundled files." />
+                      </StackPanel>
+                      <TextBox Classes="small mono" Watermark="bundled" Text="{Binding PayloadOverride}" />
+                    </StackPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <StackPanel Spacing="10">
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="sync server" />
+                        <TextBlock Classes="copy13 secondary" Text="for testing your own server." />
+                      </StackPanel>
+                      <TextBox Classes="small mono" Watermark="https://…" Text="{Binding SyncServerOverride}" />
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ============ about ============ -->
+      <TabItem Header="about">
+        <ScrollViewer>
+          <StackPanel Spacing="28" Margin="0,0,0,48" MaxWidth="720" HorizontalAlignment="Left">
+            <Border Classes="card" Padding="24">
+              <StackPanel Orientation="Horizontal" Spacing="20">
+                <Border Width="56" Height="56" CornerRadius="12" Background="#0A0A0A">
+                  <c:Icon Kind="mark" Size="26" Foreground="#FAFAFA" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel VerticalAlignment="Center" Spacing="2">
+                  <TextBlock Classes="h20" Text="{Binding Version}" />
+                  <TextBlock Classes="copy13 secondary" Text="open source, mit license" />
+                  <TextBlock Classes="mono12 tertiary" Text="{Binding RuntimeInfo}" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
+            <StackPanel>
+              <TextBlock Classes="overline" Text="links" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Button Theme="{StaticResource NavItem}" Height="52" CornerRadius="0" Padding="16,0" Foreground="{DynamicResource TextPrimary}"
+                          Command="{Binding OpenLinkCommand}" CommandParameter="{x:Static vm:Links.Repository}">
+                    <DockPanel><c:Icon DockPanel.Dock="Right" Kind="external" Foreground="{DynamicResource TextTertiary}" /><TextBlock Text="source code" /></DockPanel>
+                  </Button>
+                  <Rectangle Classes="divider" />
+                  <Button Theme="{StaticResource NavItem}" Height="52" CornerRadius="0" Padding="16,0" Foreground="{DynamicResource TextPrimary}"
+                          Command="{Binding OpenLinkCommand}" CommandParameter="{x:Static vm:Links.WritingMods}">
+                    <DockPanel><c:Icon DockPanel.Dock="Right" Kind="external" Foreground="{DynamicResource TextTertiary}" /><TextBlock Text="writing mods" /></DockPanel>
+                  </Button>
+                  <Rectangle Classes="divider" />
+                  <Button Theme="{StaticResource NavItem}" Height="52" CornerRadius="0" Padding="16,0" Foreground="{DynamicResource TextPrimary}"
+                          Command="{Binding OpenLinkCommand}" CommandParameter="{x:Static vm:Links.AntiCheatPolicy}">
+                    <DockPanel><c:Icon DockPanel.Dock="Right" Kind="external" Foreground="{DynamicResource TextTertiary}" /><TextBlock Text="anti-cheat policy" /></DockPanel>
+                  </Button>
+                  <Rectangle Classes="divider" />
+                  <Button Theme="{StaticResource NavItem}" Height="52" CornerRadius="0" Padding="16,0" Foreground="{DynamicResource TextPrimary}"
+                          Command="{Binding OpenLinkCommand}" CommandParameter="{x:Static vm:Links.ThirdParty}">
+                    <DockPanel><c:Icon DockPanel.Dock="Right" Kind="external" Foreground="{DynamicResource TextTertiary}" /><TextBlock Text="licenses" /></DockPanel>
+                  </Button>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+</UserControl>

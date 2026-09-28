@@ -1,0 +1,131 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:c="using:Evection.GUI.Controls"
+             xmlns:v="using:Evection.GUI.Views"
+             x:Class="Evection.GUI.Views.Pages.HomePage"
+             x:DataType="vm:HomePageViewModel">
+  <ScrollViewer>
+    <StackPanel Classes="page">
+      <TextBlock Classes="h32" Text="{Binding Greeting}" />
+
+      <UniformGrid Columns="3" ColumnSpacing="12">
+        <Border Classes="card" Padding="20,16">
+          <StackPanel Spacing="4">
+            <TextBlock Classes="mono12 tertiary" Text="games found" />
+            <TextBlock Classes="h32" Text="{Binding GamesFound}" />
+          </StackPanel>
+        </Border>
+        <Border Classes="card" Padding="20,16">
+          <StackPanel Spacing="4">
+            <TextBlock Classes="mono12 tertiary" Text="installed" />
+            <TextBlock Classes="h32" Text="{Binding InstalledCount}" />
+          </StackPanel>
+        </Border>
+        <Border Classes="card" Padding="20,16">
+          <StackPanel Spacing="4">
+            <TextBlock Classes="mono12 tertiary" Text="mods" />
+            <TextBlock Classes="h32" Text="{Binding ModCount}" />
+          </StackPanel>
+        </Border>
+      </UniformGrid>
+
+      <!-- First run -->
+      <Border Classes="card" Padding="24" IsVisible="{Binding !HasInstalled}">
+        <StackPanel Spacing="20">
+          <TextBlock Classes="h20" Text="get started" />
+          <UniformGrid Columns="3" ColumnSpacing="24">
+            <StackPanel Spacing="8">
+              <TextBlock Classes="mono12 tertiary" Text="01" />
+              <TextBlock Classes="label14" Text="pick a game" />
+              <TextBlock Classes="copy13 secondary wrap" Text="steam games are found automatically." />
+            </StackPanel>
+            <StackPanel Spacing="8">
+              <TextBlock Classes="mono12 tertiary" Text="02" />
+              <TextBlock Classes="label14" Text="install" />
+              <TextBlock Classes="copy13 secondary wrap" Text="works for mono and il2cpp games." />
+            </StackPanel>
+            <StackPanel Spacing="8">
+              <TextBlock Classes="mono12 tertiary" Text="03" />
+              <TextBlock Classes="label14" Text="add mods and play" />
+              <TextBlock Classes="copy13 secondary wrap" Text="drop in .dll files, then hit play." />
+            </StackPanel>
+          </UniformGrid>
+          <Button Classes="primary" HorizontalAlignment="Left" Content="browse games" Command="{Binding BrowseGamesCommand}" />
+        </StackPanel>
+      </Border>
+
+      <!-- Installed games -->
+      <StackPanel Spacing="16" IsVisible="{Binding HasInstalled}">
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Classes="link" Content="show all" Command="{Binding BrowseGamesCommand}" />
+          <TextBlock Classes="h20" Text="your games" />
+        </DockPanel>
+        <ItemsControl ItemsSource="{Binding InstalledGames}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate><UniformGrid Columns="3" ColumnSpacing="12" RowSpacing="12" /></ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="vm:GameItemViewModel">
+              <Panel>
+                <Button Classes="card" Padding="0" Height="58"
+                        Command="{Binding $parent[UserControl].((vm:HomePageViewModel)DataContext).Shell.OpenGameCommand}" CommandParameter="{Binding}">
+                  <DockPanel>
+                    <c:GameImage DockPanel.Dock="Left" Game="{Binding Info}" Kind="Header" Width="120" CornerRadius="7,0,0,7" />
+                    <StackPanel VerticalAlignment="Center" Margin="14,0,56,0">
+                      <TextBlock Classes="label14" Text="{Binding Name}" />
+                      <TextBlock Classes="copy13 tertiary" Text="{Binding SidebarSubtitle}" />
+                    </StackPanel>
+                  </DockPanel>
+                </Button>
+                <Button Classes="primary" Width="32" Height="32" Padding="0" CornerRadius="16" HorizontalAlignment="Right" Margin="0,0,14,0"
+                        ToolTip.Tip="play with mods"
+                        Command="{Binding $parent[UserControl].((vm:HomePageViewModel)DataContext).Shell.PlayCommand}" CommandParameter="{Binding}">
+                  <c:Icon Kind="play" Size="14" />
+                </Button>
+              </Panel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+
+      <!-- Not installed yet -->
+      <StackPanel Spacing="16" IsVisible="{Binding SuggestedGames.Count, Converter={x:Static v:Converters.NotZero}}">
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Classes="link" Content="show all" Command="{Binding BrowseGamesCommand}" />
+          <TextBlock Classes="h20" Text="not installed yet" />
+        </DockPanel>
+        <ItemsControl ItemsSource="{Binding SuggestedGames}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate><UniformGrid Columns="6" ColumnSpacing="16" /></ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="vm:GameItemViewModel">
+              <Button Classes="tertiary" Height="NaN" Padding="0" HorizontalContentAlignment="Stretch" Background="Transparent" BorderThickness="0"
+                      Command="{Binding $parent[UserControl].((vm:HomePageViewModel)DataContext).Shell.OpenGameCommand}" CommandParameter="{Binding}">
+                <StackPanel Spacing="10">
+                  <c:GameImage Game="{Binding Info}" Kind="Cover" Height="{Binding $self.Bounds.Width, Converter={x:Static v:Converters.CoverHeight}}" />
+                  <StackPanel Spacing="2">
+                    <TextBlock Classes="label14" Text="{Binding Name}" />
+                    <TextBlock Classes="copy13 tertiary" Text="{Binding BackendText}" />
+                  </StackPanel>
+                </StackPanel>
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+
+      <!-- Nothing found -->
+      <Border Classes="card" Padding="32" IsVisible="{Binding !HasGames}">
+        <StackPanel Spacing="12" HorizontalAlignment="Center">
+          <TextBlock Classes="h16" Text="no unity games found" HorizontalAlignment="Center" />
+          <TextBlock Classes="copy14 secondary" HorizontalAlignment="Center" Text="not from steam? add its folder." />
+          <Button HorizontalAlignment="Center" Command="{Binding Shell.Games.AddFolderCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="folder" /><TextBlock Text="add game folder" /></StackPanel>
+          </Button>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

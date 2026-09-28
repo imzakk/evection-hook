@@ -1,0 +1,102 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:c="using:Evection.GUI.Controls"
+             xmlns:v="using:Evection.GUI.Views"
+             x:Class="Evection.GUI.Views.Pages.GamesPage"
+             x:DataType="vm:GamesPageViewModel">
+  <ScrollViewer>
+    <StackPanel Classes="page" Spacing="20">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <Button Classes="small" Command="{Binding RescanCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="refresh" /><TextBlock Text="rescan" /></StackPanel>
+          </Button>
+          <Button Classes="small" Command="{Binding AddFolderCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="folder" /><TextBlock Text="add folder" /></StackPanel>
+          </Button>
+          <Border Width="1" Height="20" Background="{DynamicResource BorderDefault}" Margin="4,0" />
+          <Button Classes="tertiary icon small" Command="{Binding ShowGridCommand}" ToolTip.Tip="grid" Foreground="{DynamicResource TextSecondary}"><c:Icon Kind="grid" /></Button>
+          <Button Classes="tertiary icon small" Command="{Binding ShowListCommand}" ToolTip.Tip="list" Foreground="{DynamicResource TextSecondary}"><c:Icon Kind="list" /></Button>
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Classes="h32" Text="games" />
+          <TextBlock Classes="mono12 tertiary" Text="{Binding CountText}" />
+        </StackPanel>
+      </DockPanel>
+
+      <TabControl SelectedIndex="{Binding SelectedTab}" Padding="0">
+        <TabItem Header="all" />
+        <TabItem Header="installed" />
+        <TabItem Header="mono" />
+        <TabItem Header="il2cpp" />
+        <TabItem Header="unsupported" />
+      </TabControl>
+
+      <!-- Grid of Steam covers -->
+      <ItemsControl ItemsSource="{Binding Items}" IsVisible="{Binding GridView}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate><WrapPanel ItemWidth="176" /></ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="vm:GameItemViewModel">
+            <Button Classes="tertiary" Height="NaN" Padding="8" Margin="0,0,8,8" HorizontalContentAlignment="Stretch" BorderThickness="0"
+                    Command="{Binding $parent[UserControl].((vm:GamesPageViewModel)DataContext).Shell.OpenGameCommand}" CommandParameter="{Binding}">
+              <StackPanel Spacing="10">
+                <Panel>
+                  <c:GameImage Game="{Binding Info}" Kind="Cover" Height="240" />
+                  <c:Badge Classes="small inverse" Text="installed" ShowDot="False" IsVisible="{Binding IsInstalled}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8" />
+                  <c:Badge Classes="small red" Text="anti-cheat" ShowDot="False" IsVisible="{Binding HasAntiCheat}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8" />
+                </Panel>
+                <StackPanel Spacing="2">
+                  <TextBlock Classes="label14" Text="{Binding Name}" />
+                  <TextBlock Classes="copy13 tertiary" Text="{Binding Subtitle}" />
+                </StackPanel>
+              </StackPanel>
+            </Button>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <!-- List -->
+      <Border Classes="group" IsVisible="{Binding !GridView}">
+        <ItemsControl ItemsSource="{Binding Items}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="vm:GameItemViewModel">
+              <Button Theme="{StaticResource NavItem}" Height="64" CornerRadius="0" Padding="16,0" Foreground="{DynamicResource TextPrimary}"
+                      Command="{Binding $parent[UserControl].((vm:GamesPageViewModel)DataContext).Shell.OpenGameCommand}" CommandParameter="{Binding}"
+                      HorizontalContentAlignment="Stretch">
+                <DockPanel>
+                  <c:Icon DockPanel.Dock="Right" Kind="chevron-right" Foreground="{DynamicResource TextTertiary}" Margin="12,0,0,0" />
+                  <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <c:Badge Classes="small green" Text="mono" IsVisible="{Binding IsMono}" />
+                    <c:Badge Classes="small blue" Text="il2cpp" IsVisible="{Binding IsIl2Cpp}" />
+                    <c:Badge Classes="small inverse" Text="installed" ShowDot="False" IsVisible="{Binding IsInstalled}" />
+                    <c:Badge Classes="small red" Text="anti-cheat" IsVisible="{Binding HasAntiCheat}" />
+                    <c:Badge Classes="small" Text="linux build" IsVisible="{Binding IsLinuxNative}" />
+                  </StackPanel>
+                  <StackPanel Orientation="Horizontal" Spacing="14">
+                    <c:GameImage Game="{Binding Info}" Kind="Icon" Width="36" Height="36" CornerRadius="4" />
+                    <StackPanel VerticalAlignment="Center">
+                      <TextBlock Classes="label14" Text="{Binding Name}" />
+                      <TextBlock Classes="mono12 tertiary" Text="{Binding Info.UnityVersion, StringFormat='unity {0}'}" />
+                    </StackPanel>
+                  </StackPanel>
+                </DockPanel>
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Border>
+
+      <Border Classes="card" Padding="32" IsVisible="{Binding IsEmpty}">
+        <StackPanel Spacing="8" HorizontalAlignment="Center">
+          <TextBlock Classes="h16" Text="nothing here" HorizontalAlignment="Center" />
+          <TextBlock Classes="copy14 secondary" HorizontalAlignment="Center" Text="try another tab, or add the game's folder." />
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

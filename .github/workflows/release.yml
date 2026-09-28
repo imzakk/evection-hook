@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: tools/build-payload.sh --release
+        env:
+          # Set this repository variable once you've deployed services/sync-worker (optional).
+          SYNC_SERVER_URL: ${{ vars.SYNC_SERVER_URL }}
+      - name: Zip
+        run: |
+          cd artifacts/release
+          for rid in win-x64 linux-x64; do
+            (cd "$rid" && zip -qr "../EvectionHook-${GITHUB_REF_NAME}-$rid.zip" . -x '*.pdb')
+          done
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/release/*.zip
+          generate_release_notes: true

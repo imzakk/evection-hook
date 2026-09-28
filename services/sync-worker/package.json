@@ -1,0 +1,18 @@
+{
+  "name": "evection-hook-sync",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Optional settings-sync server for Evection Hook (Cloudflare Worker + KV, Discord sign-in).",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --no-warnings test/worker.test.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "typescript": "^5.6.0",
+    "wrangler": "^4.0.0"
+  }
+}

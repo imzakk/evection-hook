@@ -1,0 +1,19 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Evection.GUI.ViewModels"
+        x:Class="Evection.GUI.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="evection hook"
+        Icon="avares://EvectionHook/Assets/icon.ico"
+        Width="1280" Height="820" MinWidth="1040" MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BgDefault}"
+        FontFamily="{StaticResource Geist}"
+        FontSize="14"
+        Foreground="{DynamicResource TextPrimary}">
+  <TransitioningContentControl Content="{Binding Screen}">
+    <TransitioningContentControl.PageTransition>
+      <CrossFade Duration="0:0:0.35" />
+    </TransitioningContentControl.PageTransition>
+  </TransitioningContentControl>
+</Window>

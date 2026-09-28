@@ -1,0 +1,225 @@
+<!-- App shell, from the Music App frames: App/Sidebar (240) + App/Topbar (72) + content, with toasts and modals on top. -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:s="using:Evection.GUI.Services"
+             xmlns:c="using:Evection.GUI.Controls"
+             xmlns:v="using:Evection.GUI.Views"
+             x:Class="Evection.GUI.Views.ShellView"
+             x:DataType="vm:ShellViewModel">
+  <Grid ColumnDefinitions="240,*">
+    <!-- ================= Sidebar ================= -->
+    <Border Grid.Column="0" Background="{DynamicResource BgSubtle}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="0,0,1,0" Padding="12,16">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Spacing="4">
+          <StackPanel Orientation="Horizontal" Spacing="8" Margin="8,4,0,16">
+            <c:Icon Kind="mark" Size="16" VerticalAlignment="Center" />
+            <TextBlock Classes="h16" Text="evection hook" />
+          </StackPanel>
+
+          <Button Theme="{StaticResource NavItem}" Command="{Binding GoHomeCommand}" Classes.active="{Binding NavKey, Converter={x:Static v:Converters.IsEqual}, ConverterParameter=home}">
+            <StackPanel Orientation="Horizontal" Spacing="12"><c:Icon Kind="home" /><TextBlock Text="home" /></StackPanel>
+          </Button>
+          <Button Theme="{StaticResource NavItem}" Command="{Binding GoGamesCommand}" Classes.active="{Binding NavKey, Converter={x:Static v:Converters.IsEqual}, ConverterParameter=games}">
+            <StackPanel Orientation="Horizontal" Spacing="12"><c:Icon Kind="gamepad" /><TextBlock Text="games" /></StackPanel>
+          </Button>
+          <Button Theme="{StaticResource NavItem}" Command="{Binding GoProfilesCommand}" Classes.active="{Binding NavKey, Converter={x:Static v:Converters.IsEqual}, ConverterParameter=profiles}">
+            <StackPanel Orientation="Horizontal" Spacing="12"><c:Icon Kind="library" /><TextBlock Text="profiles" /></StackPanel>
+          </Button>
+
+          <Rectangle Classes="divider" Margin="0,12" />
+
+          <DockPanel Margin="10,0,4,4">
+            <Button DockPanel.Dock="Right" Classes="tertiary icon" Width="24" Height="24" Command="{Binding GoGamesCommand}" ToolTip.Tip="add a game">
+              <c:Icon Kind="plus" Foreground="{DynamicResource TextTertiary}" />
+            </Button>
+            <TextBlock Classes="mono12 tertiary" Text="your games" VerticalAlignment="Center" />
+          </DockPanel>
+        </StackPanel>
+
+        <Button DockPanel.Dock="Bottom" Theme="{StaticResource NavItem}" Command="{Binding GoSettingsCommand}" CommandParameter="{x:Null}"
+                Classes.active="{Binding NavKey, Converter={x:Static v:Converters.IsEqual}, ConverterParameter=settings}">
+          <StackPanel Orientation="Horizontal" Spacing="12"><c:Icon Kind="settings" /><TextBlock Text="settings" /></StackPanel>
+        </Button>
+
+        <Panel>
+          <TextBlock Classes="copy13 tertiary wrap" Margin="10,4" IsVisible="{Binding InstalledGames.Count, Converter={x:Static v:Converters.IsZero}}"
+                     Text="installed games show up here." />
+          <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding InstalledGames}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:GameItemViewModel">
+                  <Button Theme="{StaticResource NavItem}" Classes="tall" Padding="8,0"
+                          Command="{Binding $parent[ItemsControl].((vm:ShellViewModel)DataContext).OpenGameCommand}" CommandParameter="{Binding}">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                      <c:GameImage Game="{Binding Info}" Kind="Icon" Width="36" Height="36" CornerRadius="4" />
+                      <StackPanel VerticalAlignment="Center" Width="140">
+                        <TextBlock Classes="copy13" Text="{Binding Name}" Foreground="{DynamicResource TextPrimary}" />
+                        <TextBlock Classes="copy13 tertiary" Text="{Binding SidebarSubtitle}" />
+                      </StackPanel>
+                    </StackPanel>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </Panel>
+      </DockPanel>
+    </Border>
+
+    <!-- ================= Main ================= -->
+    <DockPanel Grid.Column="1">
+      <Grid DockPanel.Dock="Top" Height="72" Margin="24,0" ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto">
+        <Button Grid.Column="0" Classes="nav" Command="{Binding GoBackCommand}" ToolTip.Tip="back"><c:Icon Kind="chevron-left" /></Button>
+        <Button Grid.Column="1" Classes="nav" Margin="8,0,0,0" Command="{Binding GoForwardCommand}" ToolTip.Tip="forward"><c:Icon Kind="chevron-right" /></Button>
+        <TextBox Grid.Column="2" Width="360" Margin="16,0,0,0" VerticalAlignment="Center" Watermark="search games" Text="{Binding SearchText}">
+          <TextBox.InnerLeftContent>
+            <c:Icon Kind="search" Foreground="{DynamicResource TextTertiary}" Margin="0,0,-4,0" />
+          </TextBox.InnerLeftContent>
+        </TextBox>
+        <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="8" IsVisible="{Binding IsScanning}" Margin="0,0,16,0">
+          <c:Icon Kind="loader" Classes="spin" Foreground="{DynamicResource TextTertiary}" />
+          <TextBlock Classes="copy13 tertiary" Text="scanning…" VerticalAlignment="Center" />
+        </StackPanel>
+        <Button Grid.Column="5" Name="Avatar" Classes="nav" Command="{Binding ToggleAccountMenuCommand}" ToolTip.Tip="account"
+                Background="{DynamicResource BgHover}" BorderBrush="{DynamicResource BorderDefault}">
+          <Panel>
+            <TextBlock Classes="label13" Text="{Binding AccountInitial}" Foreground="{DynamicResource TextPrimary}" IsVisible="{Binding IsSignedIn}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <c:Icon Kind="user" IsVisible="{Binding !IsSignedIn}" />
+          </Panel>
+        </Button>
+        <Popup Grid.Column="5" PlacementTarget="{Binding #Avatar}" Placement="BottomEdgeAlignedRight" VerticalOffset="8"
+               IsOpen="{Binding IsAccountMenuOpen, Mode=TwoWay}" IsLightDismissEnabled="True">
+          <Border Classes="popover" Width="220">
+            <StackPanel>
+              <StackPanel Margin="10,8,10,8" Spacing="2">
+                <TextBlock Classes="label14" Text="{Binding AccountName}" />
+                <TextBlock Classes="copy13 tertiary" Text="{Binding AccountSubtitle}" />
+              </StackPanel>
+              <Rectangle Classes="divider" Margin="0,4" />
+              <Button Theme="{StaticResource MenuRow}" Command="{Binding OpenAccountCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <c:Icon Kind="cloud" Foreground="{DynamicResource TextSecondary}" />
+                  <TextBlock Text="{Binding IsSignedIn, Converter={x:Static v:Converters.SignInLabel}}" />
+                </StackPanel>
+              </Button>
+              <Button Theme="{StaticResource MenuRow}" Command="{Binding GoSettingsCommand}" CommandParameter="{x:Null}">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <c:Icon Kind="settings" Foreground="{DynamicResource TextSecondary}" />
+                  <TextBlock Text="settings" />
+                </StackPanel>
+              </Button>
+              <StackPanel IsVisible="{Binding IsSignedIn}">
+                <Rectangle Classes="divider" Margin="0,4" />
+                <Button Theme="{StaticResource MenuRow}" Classes="danger" Command="{Binding SignOutCommand}">
+                  <TextBlock Text="sign out" />
+                </Button>
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </Popup>
+      </Grid>
+
+      <TransitioningContentControl Content="{Binding CurrentPage}">
+        <TransitioningContentControl.PageTransition>
+          <CrossFade Duration="0:0:0.12" />
+        </TransitioningContentControl.PageTransition>
+      </TransitioningContentControl>
+    </DockPanel>
+
+    <!-- ================= Toasts ================= -->
+    <ItemsControl Grid.ColumnSpan="2" ItemsSource="{Binding Toasts}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="240,0,0,28">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate><StackPanel Spacing="8" /></ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate DataType="s:Toast">
+          <Border Classes="toast" HorizontalAlignment="Center" MaxWidth="560">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <c:Icon Kind="{Binding Icon}" VerticalAlignment="Center"
+                      Foreground="{Binding Kind, Converter={x:Static v:Converters.ToastIconBrush}}" />
+              <TextBlock Classes="label14" Text="{Binding Message}" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="420"
+                         Foreground="{DynamicResource TextInverse}" />
+              <Button Content="{Binding ActionText}" Command="{Binding ActionCommand}" IsVisible="{Binding HasAction}" />
+              <Button Classes="icon" Width="28" Height="28" Command="{Binding DismissCommand}" IsVisible="{Binding !HasAction}">
+                <c:Icon Kind="x" Size="14" />
+              </Button>
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <!-- ================= Modal ================= -->
+    <Panel Grid.ColumnSpan="2" IsVisible="{Binding Dialog, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <Rectangle Fill="#99000000" PointerPressed="OnScrimPressed" />
+      <Border Classes="modal" Width="440" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <ContentControl Content="{Binding Dialog}">
+          <ContentControl.DataTemplates>
+            <!-- Confirm -->
+            <DataTemplate DataType="vm:DialogViewModel">
+              <StackPanel Spacing="20">
+                <DockPanel>
+                  <Button DockPanel.Dock="Right" Classes="tertiary icon" Width="28" Height="28" Command="{Binding CancelCommand}">
+                    <c:Icon Kind="x" Foreground="{DynamicResource TextSecondary}" />
+                  </Button>
+                  <TextBlock Classes="h20" Text="{Binding Title}" TextWrapping="Wrap" TextTrimming="None" />
+                </DockPanel>
+                <TextBlock Classes="copy14 secondary wrap" Text="{Binding Message}" />
+                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                  <Button Content="cancel" Command="{Binding CancelCommand}" />
+                  <Button Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}"
+                          Classes.primary="{Binding !Danger}" Classes.danger="{Binding Danger}" />
+                </StackPanel>
+              </StackPanel>
+            </DataTemplate>
+            <!-- New / rename profile -->
+            <DataTemplate DataType="vm:ProfileDialogViewModel">
+              <StackPanel Spacing="20">
+                <DockPanel>
+                  <Button DockPanel.Dock="Right" Classes="tertiary icon" Width="28" Height="28" Command="{Binding CancelCommand}">
+                    <c:Icon Kind="x" Foreground="{DynamicResource TextSecondary}" />
+                  </Button>
+                  <TextBlock Classes="h20" Text="{Binding Title}" />
+                </DockPanel>
+                <StackPanel Spacing="16">
+                  <StackPanel IsVisible="{Binding ShowGames}">
+                    <TextBlock Classes="field" Text="game" />
+                    <ComboBox HorizontalAlignment="Stretch" MinHeight="40" FontSize="14" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGame}">
+                      <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="vm:GameItemViewModel">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                            <c:GameImage Game="{Binding Info}" Kind="Icon" Width="20" Height="20" CornerRadius="3" />
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                          </StackPanel>
+                        </DataTemplate>
+                      </ComboBox.ItemTemplate>
+                    </ComboBox>
+                  </StackPanel>
+                  <StackPanel>
+                    <TextBlock Classes="field" Text="name" />
+                    <TextBox Name="ProfileName" Text="{Binding Name}" Watermark="e.g. with friends" Classes.error="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}">
+                      <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Enter" Command="{Binding ConfirmCommand}" />
+                      </TextBox.KeyBindings>
+                    </TextBox>
+                    <TextBlock Classes="copy13 danger" Margin="0,6,0,0" Text="{Binding Error}" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  </StackPanel>
+                  <StackPanel IsVisible="{Binding ShowCopy}">
+                    <TextBlock Classes="field" Text="mods" />
+                    <ComboBox HorizontalAlignment="Stretch" MinHeight="40" FontSize="14" ItemsSource="{Binding CopyOptions}" SelectedIndex="{Binding CopyFromIndex}" />
+                  </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                  <Button Content="cancel" Command="{Binding CancelCommand}" />
+                  <Button Classes="primary" Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" />
+                </StackPanel>
+              </StackPanel>
+            </DataTemplate>
+          </ContentControl.DataTemplates>
+        </ContentControl>
+      </Border>
+    </Panel>
+  </Grid>
+</UserControl>

@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <Description>Engine-agnostic loader logic: logging, mod discovery, error isolation. Used by both runtimes.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Evection.API\Evection.API.csproj" />
+  </ItemGroup>
+</Project>

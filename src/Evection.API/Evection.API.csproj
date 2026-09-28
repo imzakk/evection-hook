@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- net472 = Unity Mono games, net6.0 = IL2CPP games (CoreCLR). -->
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <Description>The API mod authors build against. Reference this (and HarmonyX) from your mod project.</Description>
+    <RootNamespace>Evection</RootNamespace>
+    <PackageId>EvectionHook.API</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="HarmonyX" Version="$(HarmonyXVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Evection.Core" />
+  </ItemGroup>
+</Project>

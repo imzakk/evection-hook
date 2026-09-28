@@ -1,0 +1,551 @@
+<!--
+  Component themes matching the Evection UI Figma components:
+  Button (Primary/Secondary/Tertiary/Danger × Small/Medium/Large), Input, Switch, Checkbox, Badge, Card,
+  plus app-shell pieces from the Music App examples (nav items, settings groups, menus, toast, modal).
+-->
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:Evection.GUI.Controls">
+
+  <Styles.Resources>
+    <!-- ============ Button ============ -->
+    <ControlTheme x:Key="{x:Type Button}" TargetType="Button">
+      <Setter Property="Background" Value="{DynamicResource BgDefault}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="{StaticResource RadiusMd}" />
+      <Setter Property="Height" Value="40" />
+      <Setter Property="Padding" Value="16,0" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="PART_Border"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Padding="{TemplateBinding Padding}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover">
+        <Setter Property="Background" Value="{DynamicResource BgHover}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderStrong}" />
+      </Style>
+      <Style Selector="^:focus-visible /template/ Border#PART_Border">
+        <Setter Property="BoxShadow" Value="{StaticResource FocusRing}" />
+      </Style>
+      <Style Selector="^.small"><Setter Property="Height" Value="32" /><Setter Property="Padding" Value="12,0" /><Setter Property="FontSize" Value="13" /></Style>
+      <Style Selector="^.large"><Setter Property="Height" Value="48" /><Setter Property="Padding" Value="20,0" /><Setter Property="FontSize" Value="16" /></Style>
+      <Style Selector="^.primary">
+        <Setter Property="Background" Value="{DynamicResource BgInverse}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextInverse}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgInverse}" />
+      </Style>
+      <Style Selector="^.primary:pointerover">
+        <Setter Property="Background" Value="{DynamicResource BgInverseHover}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgInverseHover}" />
+      </Style>
+      <Style Selector="^.tertiary">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+      </Style>
+      <Style Selector="^.tertiary:pointerover">
+        <Setter Property="Background" Value="{DynamicResource BgHover}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgHover}" />
+      </Style>
+      <Style Selector="^.danger">
+        <Setter Property="Background" Value="{DynamicResource BgDanger}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextOnColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgDanger}" />
+      </Style>
+      <Style Selector="^.danger:pointerover">
+        <Setter Property="Background" Value="{DynamicResource BgDangerHover}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgDangerHover}" />
+      </Style>
+      <!-- Round icon-only buttons (Topbar "Nav button") -->
+      <Style Selector="^.nav">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="{StaticResource RadiusFull}" />
+        <Setter Property="Background" Value="{DynamicResource BgMuted}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgMuted}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+      </Style>
+      <Style Selector="^.nav:pointerover">
+        <Setter Property="Background" Value="{DynamicResource BgHover}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+      </Style>
+      <Style Selector="^.icon">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="0" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Background" Value="{DynamicResource BgMuted}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextTertiary}" />
+        <Setter Property="Cursor" Value="Arrow" />
+      </Style>
+      <!-- Plain text link ("Show all", "Clear") -->
+      <Style Selector="^.link">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Height" Value="NaN" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+      </Style>
+      <Style Selector="^.link:pointerover">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+      </Style>
+    </ControlTheme>
+
+    <!-- ============ Sidebar nav item (App/Sidebar) ============ -->
+    <ControlTheme x:Key="NavItem" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Height" Value="36" />
+      <Setter Property="Padding" Value="10,0" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Style Selector="^:pointerover">
+        <Setter Property="Background" Value="{DynamicResource BgHover}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgHover}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+      </Style>
+      <Style Selector="^.active">
+        <Setter Property="Background" Value="{DynamicResource BgHover}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgHover}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="FontWeight" Value="Medium" />
+      </Style>
+      <Style Selector="^.tall"><Setter Property="Height" Value="52" /></Style>
+    </ControlTheme>
+
+    <!-- ============ Menu row (Context menu / Account menu items) ============ -->
+    <ControlTheme x:Key="MenuRow" TargetType="Button" BasedOn="{StaticResource NavItem}">
+      <Setter Property="Height" Value="32" />
+      <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+      <Style Selector="^.danger"><Setter Property="Foreground" Value="{DynamicResource TextDanger}" /></Style>
+    </ControlTheme>
+
+    <!-- ============ Switch (Figma "Switch": 32×18 track, 14px knob) ============ -->
+    <ControlTheme x:Key="Switch" TargetType="CheckBox">
+      <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <StackPanel Orientation="Horizontal" Spacing="8" Background="{TemplateBinding Background}">
+            <Border Name="Track" Width="32" Height="18" CornerRadius="9" BorderThickness="1"
+                    Background="{DynamicResource BgHover}" BorderBrush="{DynamicResource BorderDefault}"
+                    VerticalAlignment="Center">
+              <Border.Transitions>
+                <Transitions>
+                  <BrushTransition Property="Background" Duration="0:0:0.15" />
+                </Transitions>
+              </Border.Transitions>
+              <Ellipse Name="Knob" Width="14" Height="14" HorizontalAlignment="Left" Margin="1,0,0,0"
+                       Fill="{DynamicResource BgDefault}" RenderTransform="translateX(0px)">
+                <Ellipse.Transitions>
+                  <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut" />
+                  </Transitions>
+                </Ellipse.Transitions>
+              </Ellipse>
+            </Border>
+            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" VerticalAlignment="Center"
+                              IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+          </StackPanel>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:checked /template/ Border#Track">
+        <Setter Property="Background" Value="{DynamicResource BgInverse}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgInverse}" />
+      </Style>
+      <Style Selector="^:checked /template/ Ellipse#Knob">
+        <Setter Property="RenderTransform" Value="translateX(14px)" />
+      </Style>
+      <Style Selector="^:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource TextTertiary}" />
+        <Setter Property="Cursor" Value="Arrow" />
+      </Style>
+      <Style Selector="^:disabled /template/ Border#Track">
+        <Setter Property="Background" Value="{DynamicResource BgMuted}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+      </Style>
+      <Style Selector="^:disabled /template/ Ellipse#Knob">
+        <Setter Property="Fill" Value="{DynamicResource BgHover}" />
+      </Style>
+      <Style Selector="^:focus-visible /template/ Border#Track">
+        <Setter Property="BoxShadow" Value="{StaticResource FocusRing}" />
+      </Style>
+    </ControlTheme>
+
+    <!-- ============ Checkbox (16px box, radius 4) ============ -->
+    <ControlTheme x:Key="{x:Type CheckBox}" TargetType="CheckBox">
+      <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <StackPanel Orientation="Horizontal" Spacing="8" Background="{TemplateBinding Background}">
+            <Border Name="Box" Width="16" Height="16" CornerRadius="{StaticResource RadiusSm}" BorderThickness="1"
+                    Background="{DynamicResource BgDefault}" BorderBrush="{DynamicResource BorderStrong}" VerticalAlignment="Center">
+              <Panel>
+                <Path Name="CheckMark" Data="M2.5 6.25L4.75 8.5L9.5 3.75" Stroke="{DynamicResource TextInverse}" StrokeThickness="2"
+                      StrokeLineCap="Round" StrokeJoin="Round" Width="12" Height="12" IsVisible="False"
+                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Rectangle Name="Dash" Width="6" Height="2" RadiusX="1" RadiusY="1" Fill="{DynamicResource TextInverse}" IsVisible="False"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Panel>
+            </Border>
+            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" VerticalAlignment="Center"
+                              IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+          </StackPanel>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:checked /template/ Border#Box">
+        <Setter Property="Background" Value="{DynamicResource BgInverse}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgInverse}" />
+      </Style>
+      <Style Selector="^:checked /template/ Path#CheckMark"><Setter Property="IsVisible" Value="True" /></Style>
+      <Style Selector="^:indeterminate /template/ Border#Box">
+        <Setter Property="Background" Value="{DynamicResource BgInverse}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BgInverse}" />
+      </Style>
+      <Style Selector="^:indeterminate /template/ Rectangle#Dash"><Setter Property="IsVisible" Value="True" /></Style>
+      <Style Selector="^:disabled"><Setter Property="Foreground" Value="{DynamicResource TextTertiary}" /></Style>
+      <Style Selector="^:disabled /template/ Border#Box">
+        <Setter Property="Background" Value="{DynamicResource BgMuted}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+      </Style>
+      <Style Selector="^:focus-visible /template/ Border#Box"><Setter Property="BoxShadow" Value="{StaticResource FocusRing}" /></Style>
+    </ControlTheme>
+
+    <!-- ============ Badge ============ -->
+    <ControlTheme x:Key="{x:Type c:Badge}" TargetType="c:Badge">
+      <Setter Property="Background" Value="{DynamicResource BgMuted}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Height" Value="24" />
+      <Setter Property="Padding" Value="10,0" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{StaticResource RadiusFull}"
+                  Padding="{TemplateBinding Padding}">
+            <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+              <Ellipse Width="6" Height="6" Fill="{TemplateBinding Foreground}" IsVisible="{TemplateBinding ShowDot}" VerticalAlignment="Center" />
+              <TextBlock Text="{TemplateBinding Text}" Classes="label12" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^.small"><Setter Property="Height" Value="20" /><Setter Property="Padding" Value="8,0" /></Style>
+      <Style Selector="^.blue"><Setter Property="Background" Value="{DynamicResource BgAccentSubtle}" /><Setter Property="Foreground" Value="{DynamicResource TextAccent}" /><Setter Property="BorderThickness" Value="0" /></Style>
+      <Style Selector="^.green"><Setter Property="Background" Value="{DynamicResource BgSuccessSubtle}" /><Setter Property="Foreground" Value="{DynamicResource TextSuccess}" /><Setter Property="BorderThickness" Value="0" /></Style>
+      <Style Selector="^.amber"><Setter Property="Background" Value="{DynamicResource BgWarningSubtle}" /><Setter Property="Foreground" Value="{DynamicResource TextWarning}" /><Setter Property="BorderThickness" Value="0" /></Style>
+      <Style Selector="^.red"><Setter Property="Background" Value="{DynamicResource BgDangerSubtle}" /><Setter Property="Foreground" Value="{DynamicResource TextDanger}" /><Setter Property="BorderThickness" Value="0" /></Style>
+      <Style Selector="^.inverse"><Setter Property="Background" Value="{DynamicResource BgInverse}" /><Setter Property="Foreground" Value="{DynamicResource TextInverse}" /><Setter Property="BorderThickness" Value="0" /></Style>
+    </ControlTheme>
+
+    <!-- ============ Tabs (underline style) ============ -->
+    <ControlTheme x:Key="{x:Type TabControl}" TargetType="TabControl">
+      <Setter Property="Padding" Value="0,24,0,0" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <DockPanel>
+            <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="0,0,0,1">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </Border>
+            <ContentPresenter Name="PART_SelectedContentHost" Margin="{TemplateBinding Padding}"
+                              Content="{TemplateBinding SelectedContent}"
+                              ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+          </DockPanel>
+        </ControlTemplate>
+      </Setter>
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Horizontal" Spacing="24" />
+        </ItemsPanelTemplate>
+      </Setter>
+    </ControlTheme>
+
+    <ControlTheme x:Key="{x:Type TabItem}" TargetType="TabItem">
+      <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="Underline" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0,0,0,2" Padding="0,10,0,10" Margin="0,0,0,-1">
+            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover"><Setter Property="Foreground" Value="{DynamicResource TextPrimary}" /></Style>
+      <Style Selector="^:selected">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="FontWeight" Value="Medium" />
+      </Style>
+      <Style Selector="^:selected /template/ Border#Underline"><Setter Property="BorderBrush" Value="{DynamicResource TextPrimary}" /></Style>
+    </ControlTheme>
+
+  </Styles.Resources>
+
+  <!-- ============ Input (Fluent TextBox restyled to the Figma "Input") ============ -->
+  <Style Selector="TextBox">
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="Padding" Value="12,0" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusMd}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="SelectionBrush" Value="#660070F3" />
+  </Style>
+  <Style Selector="TextBox.small"><Setter Property="MinHeight" Value="32" /><Setter Property="FontSize" Value="13" /></Style>
+  <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BoxShadow" Value="{StaticResource FocusRing}" />
+  </Style>
+  <Style Selector="TextBox.error /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDanger}" />
+  </Style>
+  <Style Selector="TextBox.mono"><Setter Property="FontFamily" Value="{StaticResource GeistMono}" /><Setter Property="FontSize" Value="13" /></Style>
+
+  <!-- Field label above an input -->
+  <Style Selector="TextBlock.field">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+    <Setter Property="Margin" Value="0,0,0,8" />
+  </Style>
+
+  <!-- ============ Select (ComboBox, "High ▾" in Settings) ============ -->
+  <Style Selector="ComboBox">
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Padding" Value="12,0,8,0" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusMd}" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="ComboBox /template/ Border#PopupBorder">
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="BoxShadow" Value="{StaticResource ShadowLg}" />
+  </Style>
+  <Style Selector="ComboBoxItem">
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusMd}" />
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="Padding" Value="10,0" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+
+  <!-- ============ Surfaces ============ -->
+  <!-- Settings group: rounded bordered box of rows separated by hairlines -->
+  <Style Selector="Border.group">
+    <Setter Property="Background" Value="{DynamicResource BgSubtle}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+  <Style Selector="Border.group > StackPanel > :is(Control).row">
+    <Setter Property="MinHeight" Value="68" />
+  </Style>
+  <Style Selector="Border.row">
+    <Setter Property="Padding" Value="16,14" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+  </Style>
+  <!-- Keep a gap between a row's text and the control docked on its right -->
+  <Style Selector="Border.row > DockPanel > :is(Control)[(DockPanel.Dock)=Right]">
+    <Setter Property="Margin" Value="16,0,0,0" />
+  </Style>
+  <Style Selector="Border.group > StackPanel > Border.row:not(:nth-child(1))">
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+  <Style Selector="Border.group > ItemsControl Border.row">
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+
+  <!-- Card component -->
+  <Style Selector="Border.card">
+    <Setter Property="Background" Value="{DynamicResource BgSubtle}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+    <Setter Property="Padding" Value="20" />
+  </Style>
+  <Style Selector="Button.card">
+    <Setter Property="Background" Value="{DynamicResource BgSubtle}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+    <Setter Property="Height" Value="NaN" />
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector="Button.card:pointerover">
+    <Setter Property="Background" Value="{DynamicResource BgMuted}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderStrong}" />
+  </Style>
+
+  <!-- Menus / popovers (Context menu, Account menu) -->
+  <Style Selector="Border.popover">
+    <Setter Property="Background" Value="{DynamicResource BgMuted}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="BoxShadow" Value="{StaticResource ShadowLg}" />
+  </Style>
+  <Style Selector="Rectangle.divider">
+    <Setter Property="Height" Value="1" />
+    <Setter Property="Fill" Value="{DynamicResource BorderDefault}" />
+  </Style>
+  <Style Selector="FlyoutPresenter">
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+  </Style>
+
+  <!-- Toast (bg/inverse, radius 8, Shadow/lg) -->
+  <Style Selector="Border.toast">
+    <Setter Property="Background" Value="{DynamicResource BgInverse}" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+    <Setter Property="Padding" Value="14,8,8,8" />
+    <Setter Property="MinHeight" Value="44" />
+    <Setter Property="BoxShadow" Value="{StaticResource ShadowLg}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource TextInverse}" />
+  </Style>
+  <Style Selector="Border.toast Button">
+    <Setter Property="Height" Value="28" />
+    <Setter Property="Padding" Value="10,0" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Background" Value="#14808080" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource TextInverse}" />
+  </Style>
+  <Style Selector="Border.toast Button:pointerover">
+    <Setter Property="Background" Value="#29808080" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="Border.toast Button.solid">
+    <Setter Property="Background" Value="{DynamicResource BgDefault}" />
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+  </Style>
+  <Style Selector="Border.toast Button.solid:pointerover">
+    <Setter Property="Background" Value="{DynamicResource BgHover}" />
+  </Style>
+
+  <!-- Modal -->
+  <Style Selector="Border.modal">
+    <Setter Property="Background" Value="{DynamicResource BgSubtle}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusXl}" />
+    <Setter Property="Padding" Value="24,24,24,20" />
+    <Setter Property="BoxShadow" Value="{StaticResource ShadowLg}" />
+  </Style>
+
+  <!-- Callout (inline notice inside pages) -->
+  <Style Selector="Border.callout">
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+    <Setter Property="Padding" Value="14,12" />
+    <Setter Property="Background" Value="{DynamicResource BgMuted}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="Border.callout.warning"><Setter Property="Background" Value="{DynamicResource BgWarningSubtle}" /><Setter Property="BorderThickness" Value="0" /><Setter Property="TextElement.Foreground" Value="{DynamicResource TextWarning}" /></Style>
+  <Style Selector="Border.callout.danger"><Setter Property="Background" Value="{DynamicResource BgDangerSubtle}" /><Setter Property="BorderThickness" Value="0" /><Setter Property="TextElement.Foreground" Value="{DynamicResource TextDanger}" /></Style>
+  <Style Selector="Border.callout.success"><Setter Property="Background" Value="{DynamicResource BgSuccessSubtle}" /><Setter Property="BorderThickness" Value="0" /><Setter Property="TextElement.Foreground" Value="{DynamicResource TextSuccess}" /></Style>
+  <Style Selector="Border.callout.info"><Setter Property="Background" Value="{DynamicResource BgAccentSubtle}" /><Setter Property="BorderThickness" Value="0" /><Setter Property="TextElement.Foreground" Value="{DynamicResource TextAccent}" /></Style>
+
+  <!-- Code / log surface -->
+  <Style Selector="Border.code">
+    <Setter Property="Background" Value="{DynamicResource BgSubtle}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}" />
+  </Style>
+  <Style Selector="SelectableTextBlock.code">
+    <Setter Property="FontFamily" Value="{StaticResource GeistMono}" />
+    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="LineHeight" Value="19" />
+    <Setter Property="SelectionBrush" Value="#660070F3" />
+    <Setter Property="TextTrimming" Value="None" />
+  </Style>
+
+
+  <Style Selector="ScrollViewer">
+    <Setter Property="AllowAutoHide" Value="True" />
+  </Style>
+  <!-- Spinning loader icon -->
+  <Style Selector="c|Icon.spin">
+    <Style.Animations>
+      <Animation Duration="0:0:0.9" IterationCount="INFINITE">
+        <KeyFrame Cue="0%"><Setter Property="RotateTransform.Angle" Value="0.0" /></KeyFrame>
+        <KeyFrame Cue="100%"><Setter Property="RotateTransform.Angle" Value="360.0" /></KeyFrame>
+      </Animation>
+    </Style.Animations>
+  </Style>
+
+  <!-- Plain list rows (code browser results) -->
+  <Style Selector="ListBox.plain">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector="ListBox.plain ListBoxItem">
+    <Setter Property="Padding" Value="10,7" />
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusMd}" />
+    <Setter Property="Margin" Value="0,0,0,1" />
+  </Style>
+  <Style Selector="ListBox.plain ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="{StaticResource RadiusMd}" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.plain ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BgHover}" />
+  </Style>
+  <Style Selector="ListBox.plain ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BgHover}" />
+  </Style>
+  <Style Selector="ListBox.plain ListBoxItem:selected">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+  </Style>
+
+  <!-- Page scaffolding -->
+  <Style Selector="StackPanel.page">
+    <Setter Property="Margin" Value="32,8,32,48" />
+    <Setter Property="Spacing" Value="28" />
+  </Style>
+  <Style Selector="StackPanel.section">
+    <Setter Property="Spacing" Value="0" />
+  </Style>
+</Styles>

@@ -1,0 +1,44 @@
+<!-- Text styles from the Evection UI Figma file: Heading/*, Label/*, Copy/*, Mono/* -->
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style Selector=":is(TextBlock)">
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </Style>
+
+  <Style Selector=":is(TextBlock).h48"><Setter Property="FontSize" Value="48" /><Setter Property="LineHeight" Value="56" /><Setter Property="FontWeight" Value="SemiBold" /><Setter Property="LetterSpacing" Value="-2.4" /></Style>
+  <Style Selector=":is(TextBlock).h32"><Setter Property="FontSize" Value="32" /><Setter Property="LineHeight" Value="40" /><Setter Property="FontWeight" Value="SemiBold" /><Setter Property="LetterSpacing" Value="-1.28" /></Style>
+  <Style Selector=":is(TextBlock).h24"><Setter Property="FontSize" Value="24" /><Setter Property="LineHeight" Value="32" /><Setter Property="FontWeight" Value="SemiBold" /><Setter Property="LetterSpacing" Value="-0.96" /></Style>
+  <Style Selector=":is(TextBlock).h20"><Setter Property="FontSize" Value="20" /><Setter Property="LineHeight" Value="28" /><Setter Property="FontWeight" Value="SemiBold" /><Setter Property="LetterSpacing" Value="-0.4" /></Style>
+  <Style Selector=":is(TextBlock).h16"><Setter Property="FontSize" Value="16" /><Setter Property="LineHeight" Value="24" /><Setter Property="FontWeight" Value="SemiBold" /><Setter Property="LetterSpacing" Value="-0.32" /></Style>
+
+  <Style Selector=":is(TextBlock).label16"><Setter Property="FontSize" Value="16" /><Setter Property="LineHeight" Value="20" /><Setter Property="FontWeight" Value="Medium" /></Style>
+  <Style Selector=":is(TextBlock).label14"><Setter Property="FontSize" Value="14" /><Setter Property="LineHeight" Value="20" /><Setter Property="FontWeight" Value="Medium" /></Style>
+  <Style Selector=":is(TextBlock).label13"><Setter Property="FontSize" Value="13" /><Setter Property="LineHeight" Value="16" /><Setter Property="FontWeight" Value="Medium" /></Style>
+  <Style Selector=":is(TextBlock).label12"><Setter Property="FontSize" Value="12" /><Setter Property="LineHeight" Value="16" /><Setter Property="FontWeight" Value="Medium" /></Style>
+
+  <Style Selector=":is(TextBlock).copy16"><Setter Property="FontSize" Value="16" /><Setter Property="LineHeight" Value="24" /></Style>
+  <Style Selector=":is(TextBlock).copy14"><Setter Property="FontSize" Value="14" /><Setter Property="LineHeight" Value="20" /></Style>
+  <Style Selector=":is(TextBlock).copy13"><Setter Property="FontSize" Value="13" /><Setter Property="LineHeight" Value="18" /></Style>
+
+  <Style Selector=":is(TextBlock).mono14"><Setter Property="FontFamily" Value="{StaticResource GeistMono}" /><Setter Property="FontSize" Value="14" /><Setter Property="LineHeight" Value="20" /></Style>
+  <Style Selector=":is(TextBlock).mono12"><Setter Property="FontFamily" Value="{StaticResource GeistMono}" /><Setter Property="FontSize" Value="12" /><Setter Property="LineHeight" Value="16" /></Style>
+
+  <!-- Section header ("ACCOUNT", "PLAYBACK" in the Settings frame) -->
+  <Style Selector="TextBlock.overline">
+    <Setter Property="FontFamily" Value="{StaticResource GeistMono}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="Foreground" Value="{DynamicResource TextTertiary}" />
+    <Setter Property="Margin" Value="0,0,0,8" />
+  </Style>
+
+  <!-- Colour helpers -->
+  <Style Selector=":is(TextBlock).secondary"><Setter Property="Foreground" Value="{DynamicResource TextSecondary}" /></Style>
+  <Style Selector=":is(TextBlock).tertiary"><Setter Property="Foreground" Value="{DynamicResource TextTertiary}" /></Style>
+  <Style Selector=":is(TextBlock).accent"><Setter Property="Foreground" Value="{DynamicResource TextAccent}" /></Style>
+  <Style Selector=":is(TextBlock).danger"><Setter Property="Foreground" Value="{DynamicResource TextDanger}" /></Style>
+  <Style Selector=":is(TextBlock).warning"><Setter Property="Foreground" Value="{DynamicResource TextWarning}" /></Style>
+  <Style Selector=":is(TextBlock).success"><Setter Property="Foreground" Value="{DynamicResource TextSuccess}" /></Style>
+  <Style Selector=":is(TextBlock).wrap"><Setter Property="TextWrapping" Value="Wrap" /><Setter Property="TextTrimming" Value="None" /></Style>
+</Styles>

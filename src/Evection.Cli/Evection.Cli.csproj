@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>evection</AssemblyName>
+    <RootNamespace>Evection.Cli</RootNamespace>
+    <Description>Command-line interface for Evection Hook.</Description>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Evection.Detector\Evection.Detector.csproj" />
+    <ProjectReference Include="..\Evection.Installer\Evection.Installer.csproj" />
+    <ProjectReference Include="..\Evection.Inspector\Evection.Inspector.csproj" />
+  </ItemGroup>
+</Project>

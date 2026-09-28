@@ -1,0 +1,396 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:c="using:Evection.GUI.Controls"
+             xmlns:v="using:Evection.GUI.Views"
+             xmlns:i="using:Evection.Installer"
+             x:Class="Evection.GUI.Views.Pages.GamePage"
+             x:DataType="vm:GamePageViewModel">
+  <DockPanel Margin="32,8,32,0">
+    <!-- Header -->
+    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,24">
+      <c:GameImage DockPanel.Dock="Left" Game="{Binding Game}" Kind="Cover" Width="112" Height="168" CornerRadius="8" Margin="0,0,24,0" />
+      <StackPanel DockPanel.Dock="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Spacing="8">
+        <Button Classes="primary" Command="{Binding InstallCommand}" IsVisible="{Binding !IsInstalled}" IsEnabled="{Binding CanInstall}">
+          <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="download" /><TextBlock Text="install" /></StackPanel>
+        </Button>
+        <Button Classes="primary" Command="{Binding PlayCommand}" IsVisible="{Binding IsInstalled}" ToolTip.Tip="start the game with mods">
+          <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="play" /><TextBlock Text="{Binding PlayText}" /></StackPanel>
+        </Button>
+        <Button Command="{Binding AddModsCommand}" IsVisible="{Binding IsInstalled}">
+          <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="plus" /><TextBlock Text="add mods" /></StackPanel>
+        </Button>
+        <Button Classes="icon" Width="40" Height="40" Command="{Binding OpenGameFolderCommand}" ToolTip.Tip="open game folder">
+          <c:Icon Kind="folder" />
+        </Button>
+      </StackPanel>
+      <StackPanel VerticalAlignment="Bottom" Spacing="6">
+        <TextBlock Classes="mono12 tertiary" Text="{Binding Item.StatusText}" />
+        <TextBlock Classes="h48" Text="{Binding Item.Name}" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Classes="copy14 secondary" Text="{Binding Game.Company}" VerticalAlignment="Center" />
+          <TextBlock Classes="copy14 tertiary" Text="·" VerticalAlignment="Center" />
+          <TextBlock Classes="copy14 secondary" Text="{Binding Game.UnityVersion, StringFormat='unity {0}'}" VerticalAlignment="Center" />
+          <c:Badge Classes="green" Text="mono" IsVisible="{Binding Item.IsMono}" Margin="4,0,0,0" />
+          <c:Badge Classes="blue" Text="il2cpp" IsVisible="{Binding Item.IsIl2Cpp}" Margin="4,0,0,0" />
+          <c:Badge Classes="red" Text="anti-cheat" IsVisible="{Binding Item.HasAntiCheat}" />
+        </StackPanel>
+      </StackPanel>
+    </DockPanel>
+
+    <TabControl SelectedIndex="{Binding SelectedTab}">
+      <!-- ================= Overview ================= -->
+      <TabItem Header="overview">
+        <ScrollViewer>
+          <StackPanel Spacing="28" Margin="0,0,0,48" MaxWidth="820" HorizontalAlignment="Left">
+            <StackPanel>
+              <TextBlock Classes="overline" Text="status" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <Button Classes="small primary" Content="install" Command="{Binding InstallCommand}" IsVisible="{Binding !IsInstalled}" IsEnabled="{Binding CanInstall}" />
+                        <Button Classes="small" Content="remove" Command="{Binding UninstallCommand}" IsVisible="{Binding IsInstalled}" />
+                      </StackPanel>
+                      <StackPanel Spacing="2" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                          <Ellipse Width="8" Height="8" VerticalAlignment="Center" Fill="{DynamicResource TextSuccess}" IsVisible="{Binding IsInstalled}" />
+                          <TextBlock Classes="label14" Text="{Binding StatusTitle}" />
+                        </StackPanel>
+                        <TextBlock Classes="copy13 secondary wrap" Text="{Binding StatusText}" IsVisible="{Binding HasStatusText}" />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row" IsVisible="{Binding Problems.Count, Converter={x:Static v:Converters.NotZero}}">
+                    <ItemsControl ItemsSource="{Binding Problems}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4">
+                            <c:Icon Kind="alert" Foreground="{DynamicResource TextDanger}" VerticalAlignment="Top" Margin="0,2,0,0" />
+                            <TextBlock Classes="copy13 wrap" Text="{Binding}" MaxWidth="700" Foreground="{DynamicResource TextDanger}" />
+                          </StackPanel>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel IsVisible="{Binding NeedsProtonOption}">
+              <TextBlock Classes="overline" Text="steam launch options (linux)" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <StackPanel Spacing="12">
+                      <TextBlock Classes="copy13 secondary" Text="paste this into steam › properties › launch options:" />
+                      <DockPanel>
+                        <Button DockPanel.Dock="Right" Classes="small" Margin="8,0,0,0" Command="{Binding CopyLaunchOptionCommand}">
+                          <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="copy" /><TextBlock Text="copy" /></StackPanel>
+                        </Button>
+                        <Border Classes="code" Padding="12,0" Height="32">
+                          <SelectableTextBlock Classes="code" Text="{Binding ProtonLaunchOption}" VerticalAlignment="Center" />
+                        </Border>
+                      </DockPanel>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel>
+              <TextBlock Classes="overline" Text="game" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small" Content="open" Command="{Binding OpenGameFolderCommand}" VerticalAlignment="Center" />
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="folder" />
+                        <TextBlock Classes="mono12 tertiary" Text="{Binding Game.GameDirectory}" />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <TextBlock DockPanel.Dock="Right" Classes="copy14 secondary" Text="{Binding Item.BackendText}" VerticalAlignment="Center" />
+                      <TextBlock Classes="label14" Text="backend" VerticalAlignment="Center" />
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <TextBlock DockPanel.Dock="Right" Classes="mono12 secondary" Text="{Binding Game.UnityVersion}" VerticalAlignment="Center" />
+                      <TextBlock Classes="label14" Text="unity version" VerticalAlignment="Center" />
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <TextBlock DockPanel.Dock="Right" Classes="mono12 secondary" Text="{Binding SteamAppIdText}" VerticalAlignment="Center" />
+                      <TextBlock Classes="label14" Text="steam app id" VerticalAlignment="Center" />
+                    </DockPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ================= Mods ================= -->
+      <TabItem Header="mods">
+        <ScrollViewer>
+          <StackPanel Spacing="20" Margin="0,0,0,48" MaxWidth="820" HorizontalAlignment="Left" Name="ModsDropArea"
+                      DragDrop.AllowDrop="True" Background="Transparent">
+            <Border Classes="callout" IsVisible="{Binding !IsInstalled}">
+              <DockPanel>
+                <Button DockPanel.Dock="Right" Classes="small primary" Content="install" Command="{Binding InstallCommand}" IsEnabled="{Binding CanInstall}" />
+                <TextBlock Classes="copy13" Text="install evection hook first." VerticalAlignment="Center" />
+              </DockPanel>
+            </Border>
+
+            <StackPanel IsVisible="{Binding IsInstalled}" Spacing="20">
+              <!-- Profile bar -->
+              <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" Margin="16,0,0,0">
+                  <Button Classes="small" Command="{Binding OpenModsFolderCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="folder" /><TextBlock Text="open folder" /></StackPanel>
+                  </Button>
+                  <Button Classes="small primary" Command="{Binding AddModsCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="plus" /><TextBlock Text="add mods" /></StackPanel>
+                  </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <TextBlock Classes="mono12 tertiary" Text="profile" VerticalAlignment="Center" Margin="0,0,4,0" />
+                  <ComboBox Width="220" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedProfile}">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate DataType="i:ModProfile">
+                        <TextBlock Text="{Binding Name}" />
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+                  <Button Classes="small" Command="{Binding NewProfileCommand}" ToolTip.Tip="new profile">
+                    <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="plus" /><TextBlock Text="new" /></StackPanel>
+                  </Button>
+                  <Button Classes="small tertiary icon" ToolTip.Tip="profile options">
+                    <c:Icon Kind="more" Foreground="{DynamicResource TextSecondary}" />
+                    <Button.Flyout>
+                      <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                        <MenuItem Header="rename" Command="{Binding RenameProfileCommand}" />
+                        <MenuItem Header="duplicate" Command="{Binding DuplicateProfileCommand}" />
+                        <MenuItem Header="open profile folder" Command="{Binding OpenProfileFolderCommand}" />
+                        <Separator />
+                        <MenuItem Header="delete" Command="{Binding DeleteProfileCommand}" Foreground="{DynamicResource TextDanger}" />
+                      </MenuFlyout>
+                    </Button.Flyout>
+                  </Button>
+                </StackPanel>
+              </DockPanel>
+              <TextBlock Classes="copy13 tertiary" Margin="0,-8,0,0" Text="each profile has its own mods and settings. changes apply next time the game starts." />
+
+              <Border Classes="group" IsVisible="{Binding HasMods}">
+                <ItemsControl ItemsSource="{Binding Mods}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:ModItemViewModel">
+                      <Border Classes="row" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource BorderDefault}">
+                        <DockPanel>
+                          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                            <CheckBox Theme="{StaticResource Switch}" IsChecked="{Binding Enabled}" ToolTip.Tip="on / off" />
+                            <Button Classes="tertiary icon" Command="{Binding RemoveCommand}" ToolTip.Tip="remove">
+                              <c:Icon Kind="trash" Foreground="{DynamicResource TextTertiary}" />
+                            </Button>
+                          </StackPanel>
+                          <StackPanel Orientation="Horizontal" Spacing="14">
+                            <Border Width="36" Height="36" CornerRadius="6" Background="{DynamicResource BgMuted}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1">
+                              <c:Icon Kind="package" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondary}" />
+                            </Border>
+                            <StackPanel Spacing="2" VerticalAlignment="Center">
+                              <TextBlock Classes="label14" Text="{Binding DisplayName}" />
+                              <TextBlock Classes="copy13 tertiary" Text="{Binding Details}" />
+                              <TextBlock Classes="copy13 secondary wrap" Text="{Binding Description}" IsVisible="{Binding HasDescription}" MaxWidth="560" />
+                            </StackPanel>
+                          </StackPanel>
+                        </DockPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </Border>
+
+              <Border CornerRadius="8" BorderBrush="{DynamicResource BorderStrong}" BorderThickness="1" Padding="32" IsVisible="{Binding !HasMods}"
+                      Background="{DynamicResource BgSubtle}">
+                <StackPanel Spacing="8" HorizontalAlignment="Center">
+                  <c:Icon Kind="upload" Size="24" HorizontalAlignment="Center" Foreground="{DynamicResource TextTertiary}" />
+                  <TextBlock Classes="h16" Text="no mods yet" HorizontalAlignment="Center" />
+                  <TextBlock Classes="copy14 secondary" HorizontalAlignment="Center" Text="drag .dll files here or click add mods." />
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ================= Mod settings ================= -->
+      <TabItem Header="mod settings">
+        <ScrollViewer>
+          <StackPanel Spacing="28" Margin="0,0,0,48" MaxWidth="820" HorizontalAlignment="Left">
+            <DockPanel IsVisible="{Binding HasConfigs}">
+              <Button DockPanel.Dock="Right" Classes="small" Margin="16,0,0,0" Command="{Binding OpenConfigFolderCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="folder" /><TextBlock Text="open folder" /></StackPanel>
+              </Button>
+              <TextBlock Classes="copy13 tertiary" VerticalAlignment="Center" Text="{Binding SelectedProfile.Name, StringFormat='settings for the {0} profile. saved automatically.'}" />
+            </DockPanel>
+
+            <ItemsControl ItemsSource="{Binding Configs}">
+              <ItemsControl.ItemsPanel><ItemsPanelTemplate><StackPanel Spacing="28" /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:ModConfigViewModel">
+                  <StackPanel>
+                    <TextBlock Classes="overline" Text="{Binding Title}" />
+                    <Border Classes="group">
+                      <ItemsControl ItemsSource="{Binding Entries}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate DataType="vm:ConfigEntryViewModel">
+                            <Border Classes="row" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource BorderDefault}">
+                              <DockPanel>
+                                <Panel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                  <CheckBox Theme="{StaticResource Switch}" IsChecked="{Binding BoolValue}" IsVisible="{Binding IsBoolean}" />
+                                  <TextBox Classes="small" Width="200" Text="{Binding TextValue}" IsVisible="{Binding IsText}" />
+                                </Panel>
+                                <StackPanel Spacing="2" VerticalAlignment="Center">
+                                  <TextBlock Classes="label14" Text="{Binding Key}" />
+                                  <TextBlock Classes="copy13 secondary wrap" Text="{Binding Description}" IsVisible="{Binding HasDescription}" />
+                                </StackPanel>
+                              </DockPanel>
+                            </Border>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </Border>
+                  </StackPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Border Classes="card" Padding="32" IsVisible="{Binding !HasConfigs}">
+              <StackPanel Spacing="8" HorizontalAlignment="Center">
+                <TextBlock Classes="h16" Text="no settings yet" HorizontalAlignment="Center" />
+                <TextBlock Classes="copy14 secondary" HorizontalAlignment="Center" Text="mods create their settings the first time the game runs." />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ================= Logs ================= -->
+      <TabItem Header="logs">
+        <DockPanel Margin="0,0,0,24">
+          <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+              <Button Classes="small" Command="{Binding CopyLogCommand}" IsEnabled="{Binding HasLog}">
+                <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="copy" /><TextBlock Text="copy" /></StackPanel>
+              </Button>
+              <Button Classes="small" Command="{Binding OpenLogsFolderCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="folder" /><TextBlock Text="open folder" /></StackPanel>
+              </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <Ellipse Width="6" Height="6" Fill="{DynamicResource TextSuccess}" VerticalAlignment="Center" IsVisible="{Binding HasLog}" />
+              <TextBlock Classes="mono12 tertiary" Text="latest.log" />
+            </StackPanel>
+          </DockPanel>
+          <Panel>
+            <Border Classes="code" Padding="4" IsVisible="{Binding HasLog}">
+              <ScrollViewer Name="LogScroll" HorizontalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding LogLines}" Margin="12,8">
+                  <ItemsControl.ItemsPanel><ItemsPanelTemplate><VirtualizingStackPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:LogLineViewModel">
+                      <StackPanel Orientation="Horizontal" Spacing="10" Height="20">
+                        <TextBlock Classes="mono12 tertiary" Text="{Binding Time}" Width="92" />
+                        <TextBlock Classes="mono12" Text="{Binding Level}" Width="44"
+                                   Foreground="{DynamicResource TextTertiary}"
+                                   Classes.danger="{Binding IsError}" Classes.warning="{Binding IsWarning}" />
+                        <TextBlock Classes="mono12 accent" Text="{Binding Source}" MinWidth="80" />
+                        <TextBlock Classes="mono12" Text="{Binding Message}" TextTrimming="None"
+                                   Classes.danger="{Binding IsError}" Classes.warning="{Binding IsWarning}" />
+                      </StackPanel>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Border>
+            <Border Classes="card" Padding="32" VerticalAlignment="Top" IsVisible="{Binding !HasLog}">
+              <StackPanel Spacing="8" HorizontalAlignment="Center">
+                <TextBlock Classes="h16" Text="no log yet" HorizontalAlignment="Center" />
+                <TextBlock Classes="copy14 secondary" HorizontalAlignment="Center" Text="start the game once with evection hook installed." />
+              </StackPanel>
+            </Border>
+          </Panel>
+        </DockPanel>
+      </TabItem>
+
+      <!-- ================= Advanced ================= -->
+      <TabItem Header="advanced">
+        <ScrollViewer>
+          <StackPanel Spacing="28" Margin="0,0,0,48" MaxWidth="820" HorizontalAlignment="Left">
+            <StackPanel>
+              <TextBlock Classes="overline" Text="maintenance" />
+              <Border Classes="group">
+                <StackPanel>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small" Content="reinstall" Command="{Binding ReinstallCommand}" IsEnabled="{Binding IsInstalled}" VerticalAlignment="Center" />
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="reinstall" />
+                        <TextBlock Classes="copy13 secondary" Text="replaces the loader files. keeps your mods." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small" Content="open" Command="{Binding OpenEvectionFolderCommand}" IsEnabled="{Binding IsInstalled}" VerticalAlignment="Center" />
+                      <TextBlock Classes="label14" Text="evection hook folder" VerticalAlignment="Center" />
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row" IsVisible="{Binding IsManuallyAdded}">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small" Content="remove" Command="{Binding RemoveFromLibraryCommand}" VerticalAlignment="Center" />
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14" Text="remove from list" />
+                        <TextBlock Classes="copy13 secondary" Text="nothing is deleted." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                  <Border Classes="row">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="small danger" Content="remove everything" Command="{Binding RemoveEverythingCommand}" IsEnabled="{Binding IsInstalled}" VerticalAlignment="Center" />
+                      <StackPanel Spacing="2">
+                        <TextBlock Classes="label14 danger" Text="remove everything" />
+                        <TextBlock Classes="copy13 secondary" Text="deletes evection hook, mods, settings and logs from this game." />
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel>
+              <TextBlock Classes="overline" Text="installed files" />
+              <Border Classes="code" Padding="14,12">
+                <SelectableTextBlock Classes="code" Text="{Binding InstalledFiles}" TextWrapping="Wrap" Foreground="{DynamicResource TextSecondary}" />
+              </Border>
+            </StackPanel>
+
+            <StackPanel>
+              <TextBlock Classes="overline" Text="doorstop_config.ini" />
+              <Border Classes="code" Padding="14,12">
+                <SelectableTextBlock Classes="code" Text="{Binding DoorstopConfig}" TextWrapping="Wrap" Foreground="{DynamicResource TextSecondary}" />
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+</UserControl>

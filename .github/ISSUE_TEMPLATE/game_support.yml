@@ -1,0 +1,28 @@
+name: Game support
+description: Report a game that works, doesn't work, or is detected wrongly
+labels: [game-support]
+body:
+  - type: input
+    id: game
+    attributes:
+      label: Game
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      options: [Works, Loads but mods fail, Game crashes, Detected incorrectly, Inspector fails]
+    validations:
+      required: true
+  - type: textarea
+    id: detect
+    attributes:
+      label: Output of `evection detect "<game>"`
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details and logs

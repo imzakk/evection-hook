@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Evection.Detector\Evection.Detector.csproj" />
+    <ProjectReference Include="..\..\src\Evection.Installer\Evection.Installer.csproj" />
+    <ProjectReference Include="..\..\src\Evection.Inspector\Evection.Inspector.csproj" />
+    <ProjectReference Include="..\..\src\Evection.GUI\Evection.GUI.csproj" />
+    <ProjectReference Include="..\..\src\Evection.Core\Evection.Core.csproj" />
+    <!-- Used as a real mod .dll for ModMetadataReader tests (copied next to the tests, never loaded). -->
+    <ProjectReference Include="..\..\examples\HelloMod\HelloMod.csproj" ReferenceOutputAssembly="false" OutputItemType="Content" CopyToOutputDirectory="PreserveNewest" SetTargetFramework="TargetFramework=net472" />
+  </ItemGroup>
+</Project>

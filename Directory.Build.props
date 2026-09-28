@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Authors>Evection Hook contributors</Authors>
+    <Product>Evection Hook</Product>
+    <Copyright>Copyright (c) Evection Hook contributors</Copyright>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <Deterministic>true</Deterministic>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- Versions shared by several projects -->
+  <PropertyGroup>
+    <HarmonyXVersion>2.16.1</HarmonyXVersion>
+    <UnityModulesVersion>2018.4.9</UnityModulesVersion>
+    <DecompilerVersion>9.1.0.7988</DecompilerVersion>
+    <AvaloniaVersion>11.3.22</AvaloniaVersion>
+  </PropertyGroup>
+</Project>

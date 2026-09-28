@@ -1,0 +1,63 @@
+<!-- Every mod profile across all installed games, like a launcher library. -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Evection.GUI.ViewModels"
+             xmlns:c="using:Evection.GUI.Controls"
+             x:Class="Evection.GUI.Views.Pages.ProfilesPage"
+             x:DataType="vm:ProfilesPageViewModel">
+  <ScrollViewer>
+    <StackPanel Classes="page" Spacing="20">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <ComboBox Width="200" ItemsSource="{Binding GameFilters}" SelectedIndex="{Binding GameFilter}" />
+          <ComboBox Width="160" ItemsSource="{Binding SortOptions}" SelectedIndex="{Binding SortIndex}" />
+          <Button Classes="small primary" Command="{Binding NewProfileCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="plus" /><TextBlock Text="new profile" /></StackPanel>
+          </Button>
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Classes="h32" Text="profiles" />
+          <TextBlock Classes="mono12 tertiary" Text="{Binding CountText}" />
+        </StackPanel>
+      </DockPanel>
+
+      <ItemsControl ItemsSource="{Binding Items}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate><WrapPanel ItemWidth="292" /></ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="vm:ProfileCardViewModel">
+            <Border Classes="card" Padding="0" Margin="0,0,16,16" ClipToBounds="True">
+              <StackPanel>
+                <Panel>
+                  <c:GameImage Game="{Binding Game}" Kind="Header" Height="129" CornerRadius="7,7,0,0" />
+                  <c:Badge Classes="small inverse" Text="active" ShowDot="False" IsVisible="{Binding IsActive}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
+                </Panel>
+                <StackPanel Margin="16,14,16,16" Spacing="2">
+                  <TextBlock Classes="h16" Text="{Binding Name}" />
+                  <TextBlock Classes="copy13 secondary" Text="{Binding GameName}" />
+                  <TextBlock Classes="copy13 tertiary" Text="{Binding Details}" />
+                  <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
+                    <Button Classes="small primary" Command="{Binding $parent[UserControl].((vm:ProfilesPageViewModel)DataContext).PlayCommand}" CommandParameter="{Binding}">
+                      <StackPanel Orientation="Horizontal" Spacing="8"><c:Icon Kind="play" Size="14" /><TextBlock Text="play" /></StackPanel>
+                    </Button>
+                    <Button Classes="small" Content="edit" Command="{Binding $parent[UserControl].((vm:ProfilesPageViewModel)DataContext).OpenCommand}" CommandParameter="{Binding}" />
+                  </StackPanel>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <Border Classes="card" Padding="32" IsVisible="{Binding !HasInstalledGames}">
+        <StackPanel Spacing="12" HorizontalAlignment="Center">
+          <TextBlock Classes="h16" Text="no profiles yet" HorizontalAlignment="Center" />
+          <TextBlock Classes="copy14 secondary" HorizontalAlignment="Center" Text="install evection hook into a game to start making profiles." />
+          <Button HorizontalAlignment="Center" Content="browse games" Command="{Binding Shell.GoGamesCommand}" />
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

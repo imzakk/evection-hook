@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <Description>Runtime for Unity Mono games. UnityDoorstop calls Doorstop.Entrypoint.Start() in this assembly.</Description>
+    <RootNamespace>Evection.Core.Mono</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Evection.Core\Evection.Core.csproj" />
+    <!-- Compile against Unity's API only; the game provides the real UnityEngine at runtime. -->
+    <PackageReference Include="UnityEngine.Modules" Version="$(UnityModulesVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
+</Project>

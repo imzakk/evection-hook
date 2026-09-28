@@ -1,0 +1,36 @@
+name: Bug report
+description: Something doesn't work
+labels: [bug]
+body:
+  - type: input
+    id: game
+    attributes:
+      label: Game
+      placeholder: e.g. ULTRAKILL
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: detect
+    attributes:
+      label: Output of `evection detect "<game>"`
+      render: text
+  - type: textarea
+    id: log
+    attributes:
+      label: Log
+      description: Attach or paste `<Game>/EvectionHook/Logs/latest.log`
+      render: text
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options: [Windows, Linux (Proton), Steam Deck, Other]
+    validations:
+      required: true
